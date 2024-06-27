@@ -16,7 +16,7 @@
     | --- | --- |
     | integer | client id |
     
-     **c**. The export file out of tdx **:** name = ***tdx import***
+     **c**. The export file out of tdx **:** name = ***import tdx***
     
     Create the **Sum** column which is the sum of the columns : Available, Credit, Withdrawalsreserved, OrdersReserved 
     
