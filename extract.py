@@ -122,15 +122,16 @@ def process_files_in_folder(input_folder, output_excel_path):
         for _, row in instrument_id_df.iterrows():
             try:
                 instrument_id = row['instrument id'] # both of these are name and case sensitive make sure they  match exactly 
-                best_ticker = row['best ticker']
+                best_name = row['best name']
             except KeyError as e:
+                print("Incorrect column name")
                 print(f"Available columns in instrument_id_df: {instrument_id_df.columns}") # allows for debugging in case of errors, tells the user what to name their columns
                 continue
             
             filtered_df = import_tdx_df[import_tdx_df['InstrumentID'] == instrument_id]
 
             if not filtered_df.empty:
-                sheet_name = best_ticker[:31] 
+                sheet_name = best_name[:31] 
                 ws = wb.create_sheet(title=sheet_name)
                 for df_row in dataframe_to_rows(filtered_df, index=False, header=True):
                     ws.append(df_row)
