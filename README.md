@@ -18,7 +18,7 @@
     
      **c**. The export file out of tdx **:** name = ***tdx import***
     
-    Create the **Sum** column which is the sum of all the columns in **Green**
+    Create the **Sum** column which is the sum of the columns : Available, Credit, Withdrawalsreserved, OrdersReserved 
     
     Move the ClientAccountID column to the become the first column
     
