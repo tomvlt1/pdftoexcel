@@ -65,7 +65,7 @@ To install these, assuming you have python3 installed then, in vscode console, s
     1. for example `documents/thomas/sizeautomate` ← folder where `extractv2.py`is stored
 5. run `python3 extractv2.py` in PowerShell
 
-*If you want to name the folders something else, go to lines 87 and 88 and change the `input_folder`  and `output_folder`  variables
+*If you want to name the folders something else, go and change the `input_folder`  and `output_folder`  variables
 
 ## Common mistakes
 
