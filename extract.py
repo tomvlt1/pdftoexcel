@@ -94,6 +94,8 @@ def process_files_in_folder(input_folder, output_excel_path):
         elif filename.endswith(".xlsx"):
             print(f"Processing Excel file: {filename}")
             try:
+                tdx_import = False
+                instrument_id = False
                 df = pd.read_excel(file_path)
                 sheet_name = os.path.splitext(filename)[0]
                 ws = wb.create_sheet(title=sheet_name)
@@ -102,11 +104,18 @@ def process_files_in_folder(input_folder, output_excel_path):
 
                 if "instrument_id" in sheet_name.lower(): #check if the sheet is actually within the excel - NAME CORRECTLY
                     instrument_id_df = df
-                    print(f"Loaded instrument_id sheet from {filename}")
+                    print(f"Loaded instrument_ids sheet from {filename}")
+                    instrument_id = True
 
                 if "import tdx" in sheet_name.lower(): #check if the sheet is actually within the excel - NAME CORRECTLY
                     import_tdx_df = df
-                    print(f"Loaded import_tdx sheet from {filename}")
+                    print(f"Loaded import tdx sheet from {filename}")
+                    tdx_import = True
+
+                if instrument_id == False : 
+                    print("instrument_id file not present or misnamed, also check for filetype should be excel not csv") 
+                if tdx_import == False :
+                    print("import tdx file not present or misnamed, also check for filetype should be excel not csv")  
 
             except Exception as e:
                 print(f"Error reading Excel file {file_path}: {e}")
