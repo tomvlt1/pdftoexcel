@@ -8,13 +8,13 @@
     
     | instrument id | best name |
     | --- | --- |
-    | 3dca68a8-c0df-4442-bf58-3d4b6078e57d | MAGICTOMATO |
+    | InstrumentID | TokenName |
     
     **b.  lookup table** between best id and client id in tdx : name = ***id vs best***
     
     | best_id | key |
     | --- | --- |
-    | integer | client id |
+    | Integer | Client_ID |
     
      **c**. The export file out of tdx **:** name = ***import tdx***
     
@@ -51,13 +51,10 @@ Required installs (first time only)
 
 `pip3 install openpyxl`
 
-_To install these, assuming you have python3 installed then, in vscode console, simply paste the lines and press enter.
-_
+
 1. create the “input“ folder *
 2. create the “output” folder *
 3. Place both `output_folder`  and `input_folder` in the same directory as the  `extractv2.py`
-
-    
 4. in powershell navigate to the `extractv2.py` folder `cd enter/file/path/`
     1. for example `documents/thomas/sizeautomate` ← folder where `extractv2.py`is stored
 5. run `python3 extractv2.py` in PowerShell
@@ -66,6 +63,8 @@ _
 ## Common mistakes
 
 You will most likely get an error from either misnaming headers inside your sheets or misnaming the sheets. Refer to “How to use the script” for correct labelling. 
+- The column names will be output to the console when one of them is mislabelled
+- Make sure the input file format is -.xlsx for the input data (other than pdf) <- If they are incorrectly named you will get a "One of the input files did not load" error.
 
 # Excel
 
