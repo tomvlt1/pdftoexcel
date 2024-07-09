@@ -4,7 +4,7 @@
 
 1. place all the pdf’s you need to scan into the **"input"** folder - *make sure that they are the correct **token** pdf format.* 
 2. place the  helper sheets you need into the input folder as well. **Make sure they are EXACTLY formatted the following way and named the following way too.** 
-    1.  **table** with the instrument id for each instrument: name = **instrument_ids**__
+    1.  **table** with the instrument id for each instrument: name = **instrument_ids**
     
     | instrument id | best name |
     | --- | --- |
