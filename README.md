@@ -4,19 +4,22 @@
 
 1. place all the pdf’s you need to scan into the **"input"** folder - *make sure that they are the correct **token** pdf format.* 
 2. place the  helper sheets you need into the input folder as well. **Make sure they are EXACTLY formatted the following way and named the following way too.** 
-    1.  **table** with the instrument id for each instrument: name = **instrument_id**
+    1.  **table** with the instrument id for each instrument:
+       name = **instrument_id**
     
     | instrument id | best name |
     | --- | --- |
     | InstrumentID | TokenName |
     
-    **b.  lookup table** between best id and client id in tdx : name = ***id vs best***
+    **b.  lookup table** between best id and client id in tdx :
+     name = ***id vs best***
     
     | best_id | key |
     | --- | --- |
     | Integer | Client_ID |
     
-     **c**. The export file out of tdx **:** name = ***import tdx***
+     **c**. The export file out of tdx **:**
+      name = ***import tdx***
     
     Create the **Sum** column which is the sum of the columns : Available, Credit, Withdrawalsreserved, OrdersReserved 
     
@@ -60,6 +63,7 @@ Required installs (first time only)
 5. run `python3 extractv2.py` in PowerShell
 
 *If you want to name the folders something else, go and change the `input_folder` and `output_folder` variables in the source code, should be located at the very end of the script.
+
 ## Common mistakes
 
 You will most likely get an error from either misnaming headers inside your sheets or misnaming the sheets. Refer to “How to use the script” for correct labelling. 
