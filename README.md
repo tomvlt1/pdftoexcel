@@ -59,7 +59,7 @@ Required installs (first time only)
     1. for example `documents/thomas/sizeautomate` ← folder where `extractv2.py`is stored
 5. run `python3 extractv2.py` in PowerShell
 
-*If you want to name the folders something else, go and change the `input_folder` and `output_folder` variables in the source code.
+*If you want to name the folders something else, go and change the `input_folder` and `output_folder` variables in the source code, should be located at the very end of the script.
 ## Common mistakes
 
 You will most likely get an error from either misnaming headers inside your sheets or misnaming the sheets. Refer to “How to use the script” for correct labelling. 
