@@ -7,6 +7,20 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 def extract_table_from_pdf(pdf_path):
+    """
+    Extracts table data from a PDF file.
+
+    Args:
+        pdf_path (str): Path to the PDF file.
+
+    Outputs:
+        - List of strings, each representing a line of the extracted table data.
+        - Returns an empty list if there is an error opening the PDF or reading any page.
+
+    Returns:
+        list: A list of strings representing the extracted table data.
+    """
+
     try:
         pdf_document = fitz.open(pdf_path)
     except Exception as e:
@@ -14,7 +28,7 @@ def extract_table_from_pdf(pdf_path):
         return []
     
     all_data = []
-    exclude_phrases = ["FIN DE LA LISTE", "**************************", "-----------------------"]# fin de chaque token, eliminer de la liste
+    exclude_phrases = ["FIN DE LA LISTE", "**************************", "-----------------------"] # fin de chaque token, eliminer de la liste
 
     for page_num in range(pdf_document.page_count):
         try:
@@ -33,7 +47,7 @@ def extract_table_from_pdf(pdf_path):
                     continue
                 else:
                     page_data.append(line)
-            elif '--------------------' in line: #also determine the beginning of a section
+            elif '--------------------' in line: # also determine the beginning of a section
                 table_started = True
 
         if page_data:
@@ -42,11 +56,26 @@ def extract_table_from_pdf(pdf_path):
     return all_data
 
 def split_line(line):
+    """
+    Splits a line of text into components based on whitespace and cleans the data.
+
+    Args:
+        line (str): A single line of text.
+
+    Outputs:
+        - List of strings, each representing a part of the split line.
+        - The first part is the number extracted from the beginning of the line.
+        - The last part is cleaned of any trailing question marks.
+
+    Returns:
+        list: A list of strings representing the split line components.
+    """
+
     split_data = re.split(r'\s{3,}', line)
 
     if split_data:
         first_element = split_data[0]
-        number = first_element.split(' ', 1)[0]  # Get only the number I think
+        number = first_element.split(' ', 1)[0]  # So that only the number is extracted
         split_data = [number] + split_data[1:]
 
     if split_data and len(split_data) > 1:
@@ -54,7 +83,23 @@ def split_line(line):
     
     return split_data
 
-def create_excel_table(ws, table_name, ref): 
+def create_excel_table(ws, table_name, ref):
+    """
+    Creates an Excel table within a worksheet.
+
+    Args:
+        ws (openpyxl.worksheet.worksheet.Worksheet): The worksheet to add the table to.
+        table_name (str): The name of the table.
+        ref (str): The reference range for the table.
+
+    Outputs:
+        - An Excel table added to the specified worksheet.
+
+    Returns:
+        None
+    """
+
+
     tab = Table(displayName=table_name, ref=ref)
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                            showLastColumn=False, showRowStripes=True, showColumnStripes=True)
@@ -62,6 +107,23 @@ def create_excel_table(ws, table_name, ref):
     ws.add_table(tab)
 
 def process_files_in_folder(input_folder, output_excel_path):
+    """
+    Processes PDF and Excel files in a specified folder and combines data into an output Excel file.
+
+    Args:
+        input_folder (str): Path to the input folder containing PDFs and Excel files.
+        output_excel_path (str): Path to the output Excel file.
+
+    Outputs:
+        - An Excel file at the specified output path containing combined data.
+        - A 'Combined Data' sheet with data from all processed PDFs.
+        - A 'Summary' sheet with specified headers and formulas.
+        - Sheets for each unique 'instrument_id' with filtered data.
+
+    Returns:
+        None
+    """
+
     if not os.path.exists(input_folder):
         print(f"Input folder {input_folder} does not exist.")
         return
@@ -94,8 +156,7 @@ def process_files_in_folder(input_folder, output_excel_path):
         elif filename.endswith(".xlsx"):
             print(f"Processing Excel file: {filename}")
             try:
-                tdx_import = False
-                instrument_id = False
+               
                 df = pd.read_excel(file_path)
                 sheet_name = os.path.splitext(filename)[0]
                 ws = wb.create_sheet(title=sheet_name)
@@ -105,17 +166,10 @@ def process_files_in_folder(input_folder, output_excel_path):
                 if "instrument_id" in sheet_name.lower(): #check if the sheet is actually within the excel - NAME CORRECTLY
                     instrument_id_df = df
                     print(f"Loaded instrument_ids sheet from {filename}")
-                    instrument_id = True
 
                 if "import tdx" in sheet_name.lower(): #check if the sheet is actually within the excel - NAME CORRECTLY
                     import_tdx_df = df
                     print(f"Loaded import tdx sheet from {filename}")
-                    tdx_import = True
-
-                if instrument_id == False : 
-                    print("instrument_id file not present or misnamed, also check for filetype should be excel not csv") 
-                if tdx_import == False :
-                    print("import tdx file not present or misnamed, also check for filetype should be excel not csv")  
 
             except Exception as e:
                 print(f"Error reading Excel file {file_path}: {e}")
@@ -130,7 +184,7 @@ def process_files_in_folder(input_folder, output_excel_path):
         print("Both instrument_id and import_tdx dataframes are loaded.")
         for _, row in instrument_id_df.iterrows():
             try:
-                instrument_id = row['instrument id'] # both of these are name and case sensitive make sure they  match exactly 
+                instrument_id = row['instrument id'] # both of these are name and case sensitive make sure they match exactly 
                 best_name = row['best name']
             except KeyError as e:
                 print("Incorrect column name")
@@ -147,14 +201,14 @@ def process_files_in_folder(input_folder, output_excel_path):
                 create_excel_table(ws, table_name=sheet_name, ref=f"A1:{chr(64+len(filtered_df.columns))}{len(filtered_df)+1}")
                 print(f"Created sheet {sheet_name} for InstrumentID {instrument_id}")
     else:
-        print("Missing one or both dataframes: instrument_id and import_tdx.")
+        print("Missing one or both dataframes: instrument_id and import_tdx. Make sure they are correctly named AND they are the correct file type, not csv but excel")
 
     ws_summary = wb.create_sheet(title="Summary")
     headers = ["id client", "best_id_imported", "balance best", "token", "balance tdx", "Diff"]
     ws_summary.append(headers)
 
    
-    formulas = [  # paste the formulas as text in row 3
+    formulas = [  # paste the formulas as text in row 3 of the final sheet
         '=IF(RIGHT([@token],3)="pdf","fichier",VLOOKUP(B2, \'id vs best\'!$A$2:$B$3000, 2, FALSE))',
         '=IFERROR(VALUE(TRIM(CLEAN(LEFT(SUBSTITUTE(\'Combined Data\'!K2, ".", ""), IFERROR(FIND(" ", SUBSTITUTE(\'Combined Data\'!K2, ".", "")) - 1, LEN(SUBSTITUTE(\'Combined Data\'!K2, ".", ""))))))), "")',
         '=IFERROR(VALUE(TRIM(CLEAN(SUBSTITUTE(SUBSTITUTE(IF(\'Combined Data\'!M2="","",\'Combined Data\'!M2), "\'", ""), ",", ".")))),"")',
