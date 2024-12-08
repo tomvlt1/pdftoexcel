@@ -1,5 +1,5 @@
 # ReadMe extractv2.py
-
+### This Repo was made for Taurus HQ employees to extract the required data from their accounting PDF's into excel
 ## How to Use the script
 
 1. place all the pdf’s you need to scan into the **"input"** folder - *make sure that they are the correct **token** pdf format.* 
